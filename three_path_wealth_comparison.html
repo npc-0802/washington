@@ -1,27 +1,147 @@
 
+<style>
+  :root {
+    --font-sans: "SF Pro Display", "Inter", "Segoe UI", sans-serif;
+    --font-mono: "SF Mono", "JetBrains Mono", "Menlo", monospace;
+    --color-text-primary: #f3f5f7;
+    --color-text-secondary: #a7afb8;
+    --color-text-tertiary: #7d8590;
+    --color-text-success: #20c997;
+    --color-text-info: #4ea1ff;
+    --color-text-warning: #d9911f;
+    --color-background-primary: #17191c;
+    --color-background-panel: #1f2227;
+    --color-background-success: rgba(9, 72, 48, 0.9);
+    --color-background-info: rgba(12, 37, 67, 0.92);
+    --color-background-warning: rgba(61, 42, 7, 0.92);
+    --color-border-tertiary: rgba(255, 255, 255, 0.09);
+    --border-radius-lg: 18px;
+  }
+
+  .wealth-comp {
+    background: var(--color-background-primary);
+    color-scheme: dark;
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    padding: 16px;
+    border-radius: var(--border-radius-lg);
+  }
+
+  .wealth-comp .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .wealth-comp input[type="range"] {
+    accent-color: #d8dde3;
+  }
+
+  .wealth-comp canvas {
+    display: block;
+  }
+
+  .wealth-comp .chart-toggle {
+    display: inline-flex;
+    gap: 6px;
+    padding: 4px;
+    margin: 0 0 0.75rem;
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: 999px;
+    background: var(--color-background-panel);
+  }
+
+  .wealth-comp .chart-toggle button {
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 12px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .wealth-comp .chart-toggle button.is-active {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-text-primary);
+  }
+
+  @media (max-width: 860px) {
+    .wealth-comp .controls-row {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .wealth-comp .controls-row label {
+      min-width: auto !important;
+      width: 100%;
+    }
+
+    .wealth-comp .controls-row span:last-child {
+      min-width: auto !important;
+      width: 100%;
+      text-align: left !important;
+    }
+
+    .wealth-comp #paths {
+      grid-template-columns: 1fr !important;
+    }
+
+    .wealth-comp #table {
+      overflow-x: auto;
+    }
+
+    .wealth-comp #table table {
+      min-width: 640px;
+    }
+  }
+</style>
+
+<div class="wealth-comp">
 <h2 class="sr-only">Net wealth comparison: buy and renovate Moraine St vs buy a turnkey home vs rent, with adjustable inputs.</h2>
 
-<div style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Current rent</label>
-  <input type="range" min="3000" max="7000" step="100" value="5200" id="rent" style="flex: 1;" />
-  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="rent-out">$5,200</span>
+  <input type="range" min="3000" max="7000" step="100" value="5800" id="rent" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="rent-out">$5,800</span>
 </div>
-<div style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Extras (furniture etc.)</label>
-  <input type="range" min="0" max="75000" step="1000" value="25000" id="extras" style="flex: 1;" />
-  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="extras-out">$25,000</span>
+  <input type="range" min="0" max="75000" step="1000" value="15000" id="extras" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="extras-out">$15,000</span>
 </div>
-<div style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+  <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Renovation cost</label>
+  <input type="range" min="50000" max="400000" step="10000" value="200000" id="reno" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="reno-out">$200,000</span>
+</div>
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+  <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">After-renovation value</label>
+  <input type="range" min="1100000" max="1800000" step="25000" value="1400000" id="arv" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="arv-out">$1,400,000</span>
+</div>
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+  <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Points purchased</label>
+  <input type="range" min="0" max="4" step="0.5" value="1" id="points" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="points-out">1.0 pts</span>
+</div>
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Turnkey purchase price</label>
-  <input type="range" min="700000" max="1200000" step="25000" value="900000" id="tkPrice" style="flex: 1;" />
-  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="tkPrice-out">$900,000</span>
+  <input type="range" min="700000" max="1200000" step="25000" value="975000" id="tkPrice" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="tkPrice-out">$975,000</span>
 </div>
-<div style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Rent growth</label>
   <input type="range" min="0" max="8" step="0.5" value="3.5" id="rg" style="flex: 1;" />
   <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="rg-out">3.5%</span>
 </div>
-<div style="display: flex; align-items: center; gap: 12px; margin: 0 0 1.5rem;">
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 1.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Appreciation</label>
   <input type="range" min="0" max="8" step="0.5" value="3.5" id="ap" style="flex: 1;" />
   <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="ap-out">3.5%</span>
@@ -31,6 +151,10 @@
 
 <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0 0 1.5rem;" id="paths"></div>
 
+<div class="chart-toggle" role="tablist" aria-label="Chart metric">
+  <button type="button" id="mode-wealth" data-mode="wealth" class="is-active" aria-pressed="true">Net wealth</button>
+  <button type="button" id="mode-payments" data-mode="payments" aria-pressed="false">Cumulative payments</button>
+</div>
 <div style="position: relative; width: 100%; height: 320px; margin: 0 0 0.5rem;">
   <canvas id="wChart" role="img" aria-label="Three-path wealth comparison chart">Wealth comparison</canvas>
 </div>
@@ -43,7 +167,10 @@
 <div style="background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 12px 14px; margin: 0 0 1rem;" id="table"></div>
 
 <div style="font-size: 11px; color: var(--color-text-tertiary); line-height: 1.4;">
-  Moraine: $975k, $250k gift, $200k HELOC reno, consolidation refi ~4.25% = ~$6,150/mo. Turnkey: same $250k gift as 25% down + 5.875% mortgage, no reno. Renter: invests own-cash equivalent at 10%/yr. Same appreciation rate applied to both homes. All estimates.
+  Moraine: $975k purchase, $250k gift, variable HELOC-funded renovation, an independently adjustable after-renovation value, and optional purchased points financed through the same HELOC before a modeled consolidated refi. Renovation cost changes HELOC size, refi balance, and payment; after-renovation value separately controls the finished appraisal assumption; each purchased point costs $9,500, is financed, and lowers the refi rate by 0.25 percentage points. Turnkey uses the same $250k gift as 25% down plus a 5.875% mortgage. Renter invests the savings versus the cheaper ownership option at 10% annually. All estimates.
+</div>
+<div style="font-size: 11px; color: var(--color-text-tertiary); line-height: 1.4; margin-top: 0.5rem;">
+  Simplification note: Moraine non-mortgage carrying costs are held constant for slider changes, so higher projected finished values do not trigger higher modeled taxes or insurance.
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -60,127 +187,189 @@ const M_DOWN_PCT=0.25;
 const M_DOWN=M_PRICE*M_DOWN_PCT;
 const M_CLOSE=M_PRICE*0.015;
 const M_CASH=M_DOWN+M_CLOSE-GIFT;
-const M_LOAN=M_PRICE-M_DOWN;
-const M_RENO=200000;
-const M_REFI_LOAN=950000;
-const M_ARV=1400000;
+const BASE_RENO=200000;
+const BASE_REFI_LOAN=950000;
+const BASE_REFI_RATE=0.05;
+const POINT_RATE_DROP=0.0025;
+const POINT_COST=9500;
+const BASE_ARV=1400000;
 const M_RENO_MO=6;
-const M_CARRY=6850;
-const M_STEADY=6150;
-const M_TAX1=16000;
-const M_TAXO=10000;
+const M_FIXED_COSTS=6150-pmtCalc(BASE_REFI_LOAN,BASE_REFI_RATE,30);
+const M_CARRY_PREMIUM=700;
 
 const TK_RATE=0.05875;
 const TK_DOWN_PCT=0.25;
-const TK_TAX_RATE=0.0124;
 const TK_EXEMPT=351108;
 const TK_INS=2400;
 const TK_HOA=250;
 
 const SP=0.10;
+const YEARS=10;
+const TERM_YEARS=30;
+const TK_RATE_K=12.40;
+let chartMode='wealth';
 
-function compute(rent,rg,ap,extras,tkPrice){
+function remainingBalance(principal, annualRate, years, paymentsMade){
+  if(principal<=0)return 0;
+  if(paymentsMade<=0)return principal;
+  const monthlyRate=annualRate/12;
+  const totalPayments=years*12;
+  if(monthlyRate<=0)return Math.max(0,principal*(1-paymentsMade/totalPayments));
+  const payment=pmtCalc(principal,annualRate,years);
+  const growth=Math.pow(1+monthlyRate,paymentsMade);
+  return Math.max(0,principal*growth-payment*((growth-1)/monthlyRate));
+}
+
+function compute(rent,rg,ap,extras,tkPrice,reno,arv,points){
   const mCash=M_CASH+extras;
+  const pointsCost=points*POINT_COST;
+  const mHeloc=reno+pointsCost;
+  const mRefiRate=Math.max(0.01,BASE_REFI_RATE-(points*POINT_RATE_DROP));
+  const mRefiLoan=BASE_REFI_LOAN-BASE_RENO+reno+pointsCost;
+  const mArv=arv;
+  const mSteady=pmtCalc(mRefiLoan,mRefiRate,TERM_YEARS)+M_FIXED_COSTS;
+  const mCarry=mSteady+M_CARRY_PREMIUM;
 
   const tkDown=tkPrice*TK_DOWN_PCT;
   const tkClose=tkPrice*0.015;
   const tkCash=tkDown+tkClose-GIFT+extras;
   const tkLoan=tkPrice-tkDown;
-  const tkMtg=pmtCalc(tkLoan,TK_RATE/100,30);
-  const tkTaxYr=Math.max(0,tkPrice-TK_EXEMPT)/1000*TK_RATE_K;
+  const tkMtg=pmtCalc(tkLoan,TK_RATE,30);
   const tkMo=tkMtg+(tkPrice>TK_EXEMPT?(tkPrice-TK_EXEMPT)/1000*12.40/12:0)+TK_INS/12+TK_HOA;
-  const tkTaxSav1=tkLoan*TK_RATE*0.99*0.29;
-  const tkTaxSavO=tkLoan*TK_RATE*0.97*0.29;
 
   const rCash=Math.max(mCash,tkCash,0);
 
   const years=[];
   let rPort=rCash;
+  let mPaid=0;
+  let tkPaid=0;
+  let rPaid=0;
 
-  for(let y=1;y<=10;y++){
+  for(let y=1;y<=YEARS;y++){
     const rentMo=Math.round(rent*Math.pow(1+rg/100,y-1));
     const rentYr=rent*12*Math.pow(1+rg/100,y-1);
 
-    const mHv=M_ARV*Math.pow(1+ap/100,y);
-    const mEq=mHv-M_REFI_LOAN;
+    const mHv=mArv*Math.pow(1+ap/100,y);
+    const mPmtCount=Math.max(0,y*12-M_RENO_MO);
+    const mBal=remainingBalance(mRefiLoan,mRefiRate,TERM_YEARS,mPmtCount);
+    const mEq=mHv-mBal;
 
     const tkHv=tkPrice*Math.pow(1+ap/100,y);
-    const tkEq=tkHv-tkLoan;
+    const tkBal=remainingBalance(tkLoan,TK_RATE,TERM_YEARS,y*12);
+    const tkEq=tkHv-tkBal;
 
-    const mMoNow=y===1?M_CARRY:M_STEADY;
-    const ownSavVsRent=y===1?Math.max(0,M_CARRY-rent)*M_RENO_MO+Math.max(0,M_STEADY-rent)*(12-M_RENO_MO):Math.max(0,(M_STEADY-rentMo)*12);
-    const tkSavVsRent=Math.max(0,(tkMo-rentMo)*12);
+    const ownAltMo=y===1?((mCarry*M_RENO_MO)+(mSteady*(12-M_RENO_MO)))/12:mSteady;
+    const mPaidYr=y===1?(mCarry*M_RENO_MO)+(mSteady*(12-M_RENO_MO)):mSteady*12;
+    const tkPaidYr=tkMo*12;
+    const cheapestOwnMo=Math.min(ownAltMo,tkMo);
+    const rentSavings=Math.max(0,(cheapestOwnMo-rentMo)*12);
 
-    rPort=rPort*(1+SP)+Math.max(ownSavVsRent,tkSavVsRent,0);
+    rPort=rPort*(1+SP)+rentSavings;
+    mPaid+=mPaidYr;
+    tkPaid+=tkPaidYr;
+    rPaid+=rentYr;
 
     years.push({year:y,
-      mHv:Math.round(mHv),mEq:Math.round(mEq),
-      tkHv:Math.round(tkHv),tkEq:Math.round(tkEq),tkMo:Math.round(tkMo),
+      mHv:Math.round(mHv),mBal:Math.round(mBal),mEq:Math.round(mEq),mMo:Math.round(mSteady),
+      tkHv:Math.round(tkHv),tkBal:Math.round(tkBal),tkEq:Math.round(tkEq),tkMo:Math.round(tkMo),
       rPort:Math.round(rPort),rentMo,
+      mPaid:Math.round(mPaid),tkPaid:Math.round(tkPaid),rPaid:Math.round(rPaid),
       mVsR:Math.round(mEq-rPort),mVsTk:Math.round(mEq-tkEq),
-      crossed:rentMo>=M_STEADY});
+      crossed:rentMo>=mSteady});
   }
 
   let cross=null;for(const y of years){if(y.crossed&&!cross)cross=y.year;}
-  return{years,cross,mCash,tkCash:Math.round(tkCash),rCash:Math.round(rCash),tkMo:Math.round(tkMo),tkLoan:Math.round(tkLoan)};
+  return{years,cross,mCash,tkCash:Math.round(tkCash),rCash:Math.round(rCash),tkMo:Math.round(tkMo),tkLoan:Math.round(tkLoan),mHeloc:Math.round(mHeloc),mRefiLoan:Math.round(mRefiLoan),mRefiRate,mSteady:Math.round(mSteady),mCarry:Math.round(mCarry),mArv:Math.round(mArv),pointsCost:Math.round(pointsCost)};
 }
-
-var TK_RATE_K=12.40;
 
 let chart;
 function render(){
-  const rent=+$('rent').value,rg=+$('rg').value,ap=+$('ap').value,extras=+$('extras').value,tkPrice=+$('tkPrice').value;
+  const rent=+$('rent').value,rg=+$('rg').value,ap=+$('ap').value,extras=+$('extras').value,reno=+$('reno').value,arv=+$('arv').value,points=+$('points').value,tkPrice=+$('tkPrice').value;
   $('rent-out').textContent='$'+rent.toLocaleString();
   $('extras-out').textContent='$'+extras.toLocaleString();
+  $('reno-out').textContent='$'+reno.toLocaleString();
+  $('arv-out').textContent='$'+arv.toLocaleString();
+  $('points-out').textContent=points.toFixed(1)+' pts';
   $('tkPrice-out').textContent='$'+tkPrice.toLocaleString();
   $('rg-out').textContent=rg.toFixed(1)+'%';
   $('ap-out').textContent=ap.toFixed(1)+'%';
 
-  const c=compute(rent,rg,ap,extras,tkPrice);
-  const y7=c.years[6],y10=c.years[9];
+  const c=compute(rent,rg,ap,extras,tkPrice,reno,arv,points);
+  const y7=c.years[6];
+  const outcomes=[
+    {key:'moraine',label:'Moraine + reno',value:y7.mEq,tone:'success'},
+    {key:'turnkey',label:'Turnkey',value:y7.tkEq,tone:'info'},
+    {key:'rent',label:'Rent + invest',value:y7.rPort,tone:'warning'},
+  ].sort((a,b)=>b.value-a.value);
+  const leader=outcomes[0];
+  const runnerUp=outcomes[1];
+  const verdictTone=leader.tone==='success'?'var(--color-background-success)':leader.tone==='info'?'var(--color-background-info)':'var(--color-background-warning)';
+  const leaderGap=leader.value-runnerUp.value;
+  const renoLift=c.mArv-M_PRICE-reno-M_CLOSE;
+  const crossText=c.cross?`Rent reaches the Moraine steady payment around year ${c.cross}.`:'Rent stays below the Moraine steady payment across the 10-year window.';
 
-  $('verdict').style.background='var(--color-background-success)';
-  $('verdict').innerHTML=`<div style="font-weight:500;font-size:15px;margin-bottom:4px">Moraine + reno wins by ${fmt(y7.mVsTk)} over turnkey at year 7</div><div style="font-size:14px;color:var(--color-text-secondary);line-height:1.5">The renovation creates ${fmt(M_ARV-M_PRICE-M_RENO-M_CLOSE)} in instant equity that the turnkey buyer never gets. By year 7: Moraine equity ${fmt(y7.mEq)}, turnkey equity ${fmt(y7.tkEq)}, renter portfolio ${fmt(y7.rPort)}. The reno path costs more monthly (${fmt(M_STEADY)} vs ${fmt(c.tkMo)}) but the ${fmt(M_ARV-tkPrice)} higher starting value compounds the gap every year.</div>`;
+  $('verdict').style.background=verdictTone;
+  $('verdict').innerHTML=`<div style="font-weight:500;font-size:15px;margin-bottom:4px">${leader.label} leads at year 7 by ${fmt(leaderGap)} over ${runnerUp.label}</div><div style="font-size:14px;color:var(--color-text-secondary);line-height:1.5">Renovation cost and purchased points are modeled as HELOC-funded inputs that roll into a consolidated Moraine refi balance of ${fmt(c.mRefiLoan)} at ${(c.mRefiRate*100).toFixed(2)}%. At year 7: Moraine equity ${fmt(y7.mEq)}, turnkey equity ${fmt(y7.tkEq)}, renter portfolio ${fmt(y7.rPort)}. With a ${fmt(reno)} renovation budget, an after-renovation value of ${fmt(arv)}, and ${points.toFixed(1)} points purchased (${fmt(c.pointsCost)} financed), Moraine starts with about ${fmt(renoLift)} of modeled value creation after purchase, renovation, and closing assumptions. ${crossText}</div>`;
 
   $('paths').innerHTML=[
-    {title:'Moraine + reno',mo:M_STEADY,eq7:y7.mEq,hv7:y7.mHv,cash:Math.round(c.mCash),startVal:M_ARV,t:'good'},
-    {title:'Turnkey '+fmtK(tkPrice),mo:c.tkMo,eq7:y7.tkEq,hv7:y7.tkHv,cash:c.tkCash,startVal:tkPrice,t:'accent'},
-    {title:'Rent + invest',mo:rent,eq7:y7.rPort,hv7:null,cash:c.rCash,startVal:null,t:'warn'},
+    {title:'Moraine + reno',mo:c.mSteady,eq7:y7.mEq,hv7:y7.mHv,cash:Math.round(c.mCash),paid:y7.mPaid,startVal:c.mArv,t:'good',sub:`HELOC ${fmt(c.mHeloc)}; refi ${fmt(c.mRefiLoan)} @ ${(c.mRefiRate*100).toFixed(2)}%`},
+    {title:'Turnkey '+fmtK(tkPrice),mo:c.tkMo,eq7:y7.tkEq,hv7:y7.tkHv,cash:c.tkCash,paid:y7.tkPaid,startVal:tkPrice,t:'accent'},
+    {title:'Rent + invest',mo:rent,eq7:y7.rPort,hv7:null,cash:c.rCash,paid:y7.rPaid,startVal:null,t:'warn'},
   ].map(p=>{
     const bg=p.t==='good'?'var(--color-background-success)':p.t==='accent'?'var(--color-background-info)':'var(--color-background-warning)';
     const tc=p.t==='good'?'var(--color-text-success)':p.t==='accent'?'var(--color-text-info)':'var(--color-text-warning)';
     const lc=tc;
+    const profit=p.eq7-p.cash-p.paid;
+    const profitColor=profit>=0?tc:'var(--color-text-tertiary)';
     return`<div style="background:${bg};border-radius:var(--border-radius-lg);padding:12px 14px">
       <div style="font-size:12px;font-weight:500;color:${lc};text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">${p.title}</div>
       <div style="font-size:20px;font-weight:500;font-family:var(--font-mono);color:${tc};margin-bottom:2px">${fmt(p.eq7)}</div>
-      <div style="font-size:11px;color:var(--color-text-tertiary)">wealth at yr 7</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary)">estimated wealth at yr 7</div>
       <div style="border-top:0.5px solid var(--color-border-tertiary);margin:8px 0;"></div>
       <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
         ${fmt(p.mo)}/mo${p.t==='warn'?' (rising)':' (fixed)'}<br>
         ${p.startVal?fmt(p.startVal)+' starting value':'No asset'}<br>
-        ${fmt(p.cash)} own cash in
+        ${fmt(p.cash)} own cash in<br>
+        ${fmt(p.paid)} paid by yr 7<br>
+        <span style="color:${profitColor}">${fmt(profit)} profit after cash + payments</span>${p.sub?'<br>'+p.sub:''}
       </div>
     </div>`;
   }).join('');
 
   const dk=matchMedia('(prefers-color-scheme:dark)').matches;
   if(chart)chart.destroy();
-  chart=new Chart($('wChart'),{type:'line',data:{labels:c.years.map(y=>'Yr '+y.year),datasets:[
+  const chartTitle=chartMode==='wealth'?'Estimated wealth by year':'Cumulative housing payments by year';
+  const datasetConfig=chartMode==='wealth' ? [
     {label:'Moraine + reno',data:c.years.map(y=>y.mEq),borderColor:'#1D9E75',backgroundColor:dk?'rgba(29,158,117,0.08)':'rgba(29,158,117,0.05)',fill:true,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2.5},
     {label:'Turnkey',data:c.years.map(y=>y.tkEq),borderColor:'#378ADD',backgroundColor:dk?'rgba(55,138,221,0.08)':'rgba(55,138,221,0.04)',fill:true,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2},
     {label:'Rent+invest',data:c.years.map(y=>y.rPort),borderColor:'#E24B4A',backgroundColor:dk?'rgba(226,75,74,0.06)':'rgba(226,75,74,0.03)',fill:true,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:1.5},
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ct=>ct.dataset.label+': '+fmt(ct.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:dk?'#aaa':'#666'},grid:{color:dk?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)'}},x:{ticks:{color:dk?'#aaa':'#666'},grid:{display:false}}}}});
+  ] : [
+    {label:'Moraine + reno',data:c.years.map(y=>y.mPaid),borderColor:'#1D9E75',backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2.5,borderDash:[0]},
+    {label:'Turnkey',data:c.years.map(y=>y.tkPaid),borderColor:'#378ADD',backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2,borderDash:[0]},
+    {label:'Rent+invest',data:c.years.map(y=>y.rPaid),borderColor:'#E24B4A',backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:1.5,borderDash:[0]},
+  ];
+  chart=new Chart($('wChart'),{type:'line',data:{labels:c.years.map(y=>'Yr '+y.year),datasets:[
+    ...datasetConfig
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:chartTitle,color:dk?'#ddd':'#444',padding:{bottom:12}},tooltip:{callbacks:{label:ct=>ct.dataset.label+': '+fmt(ct.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:dk?'#aaa':'#666'},grid:{color:dk?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)'}},x:{ticks:{color:dk?'#aaa':'#666'},grid:{display:false}}}}});
 
-  $('table').innerHTML=`<div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Year-by-year wealth</div><table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed"><thead><tr>${['Yr','Moraine equity','Turnkey equity','Renter $','Reno vs turnkey','Reno vs rent'].map((h,i)=>`<th style="text-align:${i===0?'left':'right'};padding:5px 4px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${h}</th>`).join('')}</tr></thead><tbody>${c.years.map(y=>`<tr>
+  $('mode-wealth').classList.toggle('is-active',chartMode==='wealth');
+  $('mode-wealth').setAttribute('aria-pressed',String(chartMode==='wealth'));
+  $('mode-payments').classList.toggle('is-active',chartMode==='payments');
+  $('mode-payments').setAttribute('aria-pressed',String(chartMode==='payments'));
+
+  $('table').innerHTML=`<div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Year-by-year wealth</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Home equity includes estimated remaining loan balance after scheduled payments. Renting assumes the savings versus the cheaper ownership option are invested at 10% annually. Moraine renovation cost is ${fmt(reno)}, after-renovation value is ${fmt(arv)}, and ${points.toFixed(1)} purchased points cost ${fmt(c.pointsCost)} and are financed through the HELOC, which also lowers the refi rate by ${(points*0.25).toFixed(2)} percentage points.</div><table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed"><thead><tr>${['Yr','Moraine equity','Turnkey equity','Renter $','Reno vs turnkey','Reno vs rent'].map((h,i)=>`<th style="text-align:${i===0?'left':'right'};padding:5px 4px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${h}</th>`).join('')}</tr></thead><tbody>${c.years.map(y=>`<tr>
     <td style="padding:4px;border-bottom:0.5px solid var(--color-border-tertiary)">${y.year}</td>
     <td style="padding:4px;text-align:right;font-family:var(--font-mono);color:var(--color-text-success);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.mEq)}</td>
     <td style="padding:4px;text-align:right;font-family:var(--font-mono);color:var(--color-text-info);border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.tkEq)}</td>
     <td style="padding:4px;text-align:right;font-family:var(--font-mono);color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.rPort)}</td>
-    <td style="padding:4px;text-align:right;font-family:var(--font-mono);font-weight:500;color:var(--color-text-success);border-bottom:0.5px solid var(--color-border-tertiary)">+${fmtK(y.mVsTk)}</td>
-    <td style="padding:4px;text-align:right;font-family:var(--font-mono);font-weight:500;color:var(--color-text-success);border-bottom:0.5px solid var(--color-border-tertiary)">+${fmtK(y.mVsR)}</td>
+    <td style="padding:4px;text-align:right;font-family:var(--font-mono);font-weight:500;color:${y.mVsTk>=0?'var(--color-text-success)':'var(--color-text-warning)'};border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.mVsTk)}</td>
+    <td style="padding:4px;text-align:right;font-family:var(--font-mono);font-weight:500;color:${y.mVsR>=0?'var(--color-text-success)':'var(--color-text-warning)'};border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.mVsR)}</td>
   </tr>`).join('')}</tbody></table>`;
 }
 
-['rent','rg','ap','extras','tkPrice'].forEach(id=>$(id).addEventListener('input',render));
+['rent','rg','ap','extras','reno','arv','points','tkPrice'].forEach(id=>$(id).addEventListener('input',render));
+$('mode-wealth').addEventListener('click',()=>{chartMode='wealth';render();});
+$('mode-payments').addEventListener('click',()=>{chartMode='payments';render();});
 render();
 </script>
+</div>
