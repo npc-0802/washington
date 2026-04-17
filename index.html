@@ -216,7 +216,7 @@
 <div style="background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 12px 14px; margin: 0 0 1rem;" id="table"></div>
 
 <div style="font-size: 11px; color: var(--color-text-tertiary); line-height: 1.4;">
-  Washington: variable purchase price, variable down payment, a $250k cash pool allocated first to down payment and then to renovation, an independently adjustable after-renovation value, and optional purchased points financed through HELOC. Renovation cash shortfalls and points are modeled as HELOC debt; the potential refi is modeled but not assumed guaranteed. Each purchased point costs $9,500, is financed, and lowers the potential refi rate by 0.25 percentage points. Turnkey uses a 25% down payment plus the selected purchase price and a 5.875% mortgage. Renter invests the savings versus the cheaper ownership option at 10% annually. All estimates.
+  Washington: variable purchase price, variable down payment, a $250k cash pool allocated first to down payment and then to renovation, an independently adjustable after-renovation value, and optional purchased points financed through HELOC. Washington carrying costs include HOA of $433/mo and taxes of about $9,500/yr; PMI is modeled at about $400/mo while keeping the original mortgage when LTV is above 80%, and drops in the refi view. Renovation cash shortfalls and points are modeled as HELOC debt; the potential refi is modeled but not assumed guaranteed. Each purchased point costs $9,500, is financed, and lowers the potential refi rate by 0.25 percentage points. Turnkey uses a 25% down payment plus the selected purchase price and a 5.875% mortgage. Renter invests the savings versus the cheaper ownership option at 10% annually. All estimates.
 </div>
 <div style="font-size: 11px; color: var(--color-text-tertiary); line-height: 1.4; margin-top: 0.5rem;">
   Simplification note: Washington non-mortgage carrying costs are held constant for slider changes, so higher projected finished values do not trigger higher modeled taxes or insurance.
@@ -240,9 +240,10 @@ const POINT_RATE_DROP=0.0025;
 const POINT_COST=9500;
 const BASE_ARV=1400000;
 const M_RENO_MO=6;
-const BASE_POINTS=1;
-const BASE_REFI_LOAN=BASE_PRICE-BASE_DOWN+(BASE_POINTS*POINT_COST);
-const M_FIXED_COSTS=6150-pmtCalc(BASE_REFI_LOAN,BASE_REFI_RATE-(BASE_POINTS*POINT_RATE_DROP),30);
+const WASH_TAX_YR=9500;
+const WASH_HOA=433;
+const WASH_PMI=400;
+const M_FIXED_COSTS=(WASH_TAX_YR/12)+WASH_HOA;
 const HELOC_RATE_SPREAD=0.01;
 
 const TK_RATE=0.05875;
@@ -284,10 +285,11 @@ function compute(rent,rg,ap,extras,tkPrice,mPrice,mDown,mInitialRate,mRefiBaseRa
   const mInitialMtg=pmtCalc(mMortgage,mInitialRate,TERM_YEARS);
   const mHelocPayment=mHeloc>0?pmtCalc(mHeloc,mHelocRate,TERM_YEARS):0;
   const mHelocCarry=mHeloc*mHelocRate/12;
+  const mPmi=(mPrice>0&&mMortgage/mPrice>0.8)?WASH_PMI:0;
   const mRefiSteady=pmtCalc(mRefiLoan,mRefiRate,TERM_YEARS)+M_FIXED_COSTS;
-  const mNoRefiSteady=mInitialMtg+mHelocPayment+M_FIXED_COSTS;
+  const mNoRefiSteady=mInitialMtg+mHelocPayment+M_FIXED_COSTS+mPmi;
   const mSteady=useRefi?mRefiSteady:mNoRefiSteady;
-  const mCarry=mInitialMtg+mHelocCarry+M_FIXED_COSTS;
+  const mCarry=mInitialMtg+mHelocCarry+M_FIXED_COSTS+mPmi;
   const mCash=mDown+renoCashUsed+mClose+extras;
   const mImmediateDebt=useRefi?mRefiLoan:mMortgage+mHeloc;
   const mImmediateEquity=mArv-mImmediateDebt;
@@ -354,7 +356,7 @@ function compute(rent,rg,ap,extras,tkPrice,mPrice,mDown,mInitialRate,mRefiBaseRa
   const requiredArvForRent=(y7.rPort+y7.mBal)/Math.pow(1+ap/100,7);
   const requiredArvForRefi80=mRefiLoan/0.8;
   const requiredArvReasonable=Math.max(requiredArvForProfit,requiredArvForTurnkey,requiredArvForRent,useRefi?requiredArvForRefi80:0);
-  return{years,cross,mCash:Math.round(mCash),mClose:Math.round(mClose),mMortgage:Math.round(mMortgage),mDown:Math.round(mDown),renoCashAvailable:Math.round(renoCashAvailable),renoCashUsed:Math.round(renoCashUsed),renoShortfall:Math.round(renoShortfall),tkCash:Math.round(tkCash),rCash:Math.round(rCash),tkMo:Math.round(tkMo),tkLoan:Math.round(tkLoan),mHeloc:Math.round(mHeloc),mHelocRate,mRefiLoan:Math.round(mRefiLoan),mRefiPossible,mInitialRate,mRefiBaseRate,mRefiRate,mInitialMtg:Math.round(mInitialMtg),mHelocCarry:Math.round(mHelocCarry),mHelocPayment:Math.round(mHelocPayment),mRefiSteady:Math.round(mRefiSteady),mNoRefiSteady:Math.round(mNoRefiSteady),mSteady:Math.round(mSteady),mCarry:Math.round(mCarry),mArv:Math.round(mArv),mImmediateEquity:Math.round(mImmediateEquity),mImmediateEquityPct,tkImmediateEquity:Math.round(tkImmediateEquity),tkImmediateEquityPct,rImmediateEquity:Math.round(rImmediateEquity),pointsCost:Math.round(pointsCost),requiredArvForProfit:Math.round(requiredArvForProfit),requiredArvForTurnkey:Math.round(requiredArvForTurnkey),requiredArvForRent:Math.round(requiredArvForRent),requiredArvForRefi80:Math.round(requiredArvForRefi80),requiredArvReasonable:Math.round(requiredArvReasonable)};
+  return{years,cross,mCash:Math.round(mCash),mClose:Math.round(mClose),mMortgage:Math.round(mMortgage),mDown:Math.round(mDown),renoCashAvailable:Math.round(renoCashAvailable),renoCashUsed:Math.round(renoCashUsed),renoShortfall:Math.round(renoShortfall),tkCash:Math.round(tkCash),rCash:Math.round(rCash),tkMo:Math.round(tkMo),tkLoan:Math.round(tkLoan),mHeloc:Math.round(mHeloc),mHelocRate,mRefiLoan:Math.round(mRefiLoan),mRefiPossible,mInitialRate,mRefiBaseRate,mRefiRate,mInitialMtg:Math.round(mInitialMtg),mHelocCarry:Math.round(mHelocCarry),mHelocPayment:Math.round(mHelocPayment),mTaxMo:Math.round(WASH_TAX_YR/12),mHoa:WASH_HOA,mPmi:Math.round(mPmi),mFixedCosts:Math.round(M_FIXED_COSTS),mRefiSteady:Math.round(mRefiSteady),mNoRefiSteady:Math.round(mNoRefiSteady),mSteady:Math.round(mSteady),mCarry:Math.round(mCarry),mArv:Math.round(mArv),mImmediateEquity:Math.round(mImmediateEquity),mImmediateEquityPct,tkImmediateEquity:Math.round(tkImmediateEquity),tkImmediateEquityPct,rImmediateEquity:Math.round(rImmediateEquity),pointsCost:Math.round(pointsCost),requiredArvForProfit:Math.round(requiredArvForProfit),requiredArvForTurnkey:Math.round(requiredArvForTurnkey),requiredArvForRent:Math.round(requiredArvForRent),requiredArvForRefi80:Math.round(requiredArvForRefi80),requiredArvReasonable:Math.round(requiredArvReasonable)};
 }
 
 let chart;
@@ -374,7 +376,16 @@ function render(){
   $('ap-out').textContent=ap.toFixed(1)+'%';
 
   const c=compute(rent,rg,ap,extras,tkPrice,mPrice,mDown,mInitialRate,mRefiBaseRate,reno,arv,points,useRefi);
+  const refiCase=useRefi?c:compute(rent,rg,ap,extras,tkPrice,mPrice,mDown,mInitialRate,mRefiBaseRate,reno,arv,points,true);
+  const noRefiCase=useRefi?compute(rent,rg,ap,extras,tkPrice,mPrice,mDown,mInitialRate,mRefiBaseRate,reno,arv,points,false):c;
   const y7=c.years[6];
+  const refiY7=refiCase.years[6];
+  const noRefiY7=noRefiCase.years[6];
+  const refiNet=refiY7.mEq-refiCase.mCash-refiY7.mPaid;
+  const noRefiNet=noRefiY7.mEq-noRefiCase.mCash-noRefiY7.mPaid;
+  const refiDelta=refiNet-noRefiNet;
+  const refiRecommendation=Math.abs(refiDelta)<5000?'Refi is roughly neutral':refiDelta>0?'You should refi':'You should not refi';
+  const refiReason=Math.abs(refiDelta)<5000?`The modeled 7-year net difference is only ${fmt(Math.abs(refiDelta))}.`:refiDelta>0?`Refi is ahead by ${fmt(refiDelta)} in 7-year net after cash + payments.`:`Keeping the original mortgage is ahead by ${fmt(Math.abs(refiDelta))} in 7-year net after cash + payments.`;
   const outcomes=[
     {key:'washington',label:'Washington + reno',value:y7.mEq,tone:'success'},
     {key:'turnkey',label:'Turnkey',value:y7.tkEq,tone:'info'},
@@ -388,14 +399,14 @@ function render(){
   const crossText=c.cross?`Rent reaches the Washington steady payment around year ${c.cross}.`:'Rent stays below the Washington steady payment across the 10-year window.';
   const arvGap=arv-c.requiredArvReasonable;
   const arvText=arvGap>=0?`Current ARV clears that threshold by ${fmt(arvGap)}.`:`Current ARV is ${fmt(Math.abs(arvGap))} below that threshold.`;
-  const debtMode=useRefi?`potential consolidated debt is ${fmt(c.mRefiLoan)} at ${(c.mRefiRate*100).toFixed(3)}% after points`:`original mortgage is kept at ${(c.mInitialRate*100).toFixed(3)}%, with any HELOC modeled separately at ${(c.mHelocRate*100).toFixed(3)}%`;
+  const debtMode=useRefi?`potential consolidated debt is ${fmt(c.mRefiLoan)} at ${(c.mRefiRate*100).toFixed(3)}% after points, with PMI removed`:`original mortgage is kept at ${(c.mInitialRate*100).toFixed(3)}%, with any HELOC modeled separately at ${(c.mHelocRate*100).toFixed(3)}% and PMI of ${fmt(c.mPmi)}/mo`;
   const refiHurdle=useRefi?', alternatives, and an 80% LTV refi support check':', turnkey, and rent + invest alternatives';
 
   $('verdict').style.background=verdictTone;
-  $('verdict').innerHTML=`<div style="font-weight:500;font-size:15px;margin-bottom:4px">${leader.label} leads at year 7 by ${fmt(leaderGap)} over ${runnerUp.label}</div><div style="font-size:14px;color:var(--color-text-secondary);line-height:1.5">Washington uses a ${fmt(mDown)} down payment from the ${fmt(GIFT)} pool, leaving ${fmt(c.renoCashAvailable)} cash available for renovation. HELOC needed: ${fmt(c.mHeloc)} (${fmt(c.renoShortfall)} renovation shortfall + ${fmt(c.pointsCost)} points). In this view, ${debtMode}. At year 7: Washington equity ${fmt(y7.mEq)}, turnkey equity ${fmt(y7.tkEq)}, renter portfolio ${fmt(y7.rPort)}. Required post-reno value to clear profit${refiHurdle} is about ${fmt(c.requiredArvReasonable)}. ${arvText} ${crossText}</div>`;
+  $('verdict').innerHTML=`<div style="font-weight:500;font-size:15px;margin-bottom:4px">${leader.label} leads at year 7 by ${fmt(leaderGap)} over ${runnerUp.label}</div><div style="font-size:14px;color:var(--color-text-secondary);line-height:1.5"><strong style="color:var(--color-text-primary)">${refiRecommendation}.</strong> ${refiReason} Washington uses a ${fmt(mDown)} down payment from the ${fmt(GIFT)} pool, leaving ${fmt(c.renoCashAvailable)} cash available for renovation. HELOC needed: ${fmt(c.mHeloc)} (${fmt(c.renoShortfall)} renovation shortfall + ${fmt(c.pointsCost)} points). In this view, ${debtMode}. At year 7: Washington equity ${fmt(y7.mEq)}, turnkey equity ${fmt(y7.tkEq)}, renter portfolio ${fmt(y7.rPort)}. Required post-reno value to clear profit${refiHurdle} is about ${fmt(c.requiredArvReasonable)}. ${arvText} ${crossText}</div>`;
 
   $('paths').innerHTML=[
-    {title:'Washington + reno',mo:c.mSteady,eq7:y7.mEq,hv7:y7.mHv,cash:Math.round(c.mCash),paid:y7.mPaid,startVal:c.mArv,immEq:c.mImmediateEquity,immPct:c.mImmediateEquityPct,t:'good',sub:useRefi?`Refi view: debt ${fmt(c.mRefiLoan)} @ ${(c.mRefiRate*100).toFixed(3)}%`:`No-refi view: mortgage ${fmt(c.mMortgage)} + HELOC ${fmt(c.mHeloc)}`},
+    {title:'Washington + reno',mo:c.mSteady,eq7:y7.mEq,hv7:y7.mHv,cash:Math.round(c.mCash),paid:y7.mPaid,startVal:c.mArv,immEq:c.mImmediateEquity,immPct:c.mImmediateEquityPct,t:'good',sub:useRefi?`Refi view: debt ${fmt(c.mRefiLoan)} @ ${(c.mRefiRate*100).toFixed(3)}%; no PMI`:`No-refi view: mortgage ${fmt(c.mMortgage)} + HELOC ${fmt(c.mHeloc)}; PMI ${fmt(c.mPmi)}/mo`},
     {title:'Turnkey '+fmtK(tkPrice),mo:c.tkMo,eq7:y7.tkEq,hv7:y7.tkHv,cash:c.tkCash,paid:y7.tkPaid,startVal:tkPrice,immEq:c.tkImmediateEquity,immPct:c.tkImmediateEquityPct,t:'accent'},
     {title:'Rent + invest',mo:rent,eq7:y7.rPort,hv7:null,cash:c.rCash,paid:y7.rPaid,startVal:null,immEq:c.rImmediateEquity,immPct:null,t:'warn'},
   ].map(p=>{
@@ -441,7 +452,7 @@ function render(){
   $('mode-payments').classList.toggle('is-active',chartMode==='payments');
   $('mode-payments').setAttribute('aria-pressed',String(chartMode==='payments'));
 
-  $('table').innerHTML=`<div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Year-by-year wealth</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Home equity includes estimated remaining loan balance after scheduled payments. Current Washington mode: ${useRefi?'post-renovation refi':'keep original mortgage'}. Washington cash allocation: ${fmt(c.mDown)} down, ${fmt(c.renoCashUsed)} renovation cash, ${fmt(c.renoShortfall)} renovation HELOC shortfall, ${fmt(c.pointsCost)} financed points. Required post-reno value: ${fmt(c.requiredArvForProfit)} for profit after cash + payments, ${fmt(c.requiredArvForTurnkey)} to match turnkey, ${fmt(c.requiredArvForRent)} to match rent + invest${useRefi?`, and ${fmt(c.requiredArvForRefi80)} to support the modeled debt at 80% LTV`:''}.</div><table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed"><thead><tr>${['Yr','Washington equity','Turnkey equity','Renter $','Reno vs turnkey','Reno vs rent'].map((h,i)=>`<th style="text-align:${i===0?'left':'right'};padding:5px 4px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${h}</th>`).join('')}</tr></thead><tbody>${c.years.map(y=>`<tr>
+  $('table').innerHTML=`<div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Year-by-year wealth</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Home equity includes estimated remaining loan balance after scheduled payments. Current Washington mode: ${useRefi?'post-renovation refi':'keep original mortgage'}. Washington monthly carrying add-ons: ${fmt(c.mTaxMo)} taxes, ${fmt(c.mHoa)} HOA, ${useRefi?'no PMI after refi':fmt(c.mPmi)+' PMI'}. Cash allocation: ${fmt(c.mDown)} down, ${fmt(c.renoCashUsed)} renovation cash, ${fmt(c.renoShortfall)} renovation HELOC shortfall, ${fmt(c.pointsCost)} financed points. Required post-reno value: ${fmt(c.requiredArvForProfit)} for profit after cash + payments, ${fmt(c.requiredArvForTurnkey)} to match turnkey, ${fmt(c.requiredArvForRent)} to match rent + invest${useRefi?`, and ${fmt(c.requiredArvForRefi80)} to support the modeled debt at 80% LTV`:''}.</div><table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed"><thead><tr>${['Yr','Washington equity','Turnkey equity','Renter $','Reno vs turnkey','Reno vs rent'].map((h,i)=>`<th style="text-align:${i===0?'left':'right'};padding:5px 4px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${h}</th>`).join('')}</tr></thead><tbody>${c.years.map(y=>`<tr>
     <td style="padding:4px;border-bottom:0.5px solid var(--color-border-tertiary)">${y.year}</td>
     <td style="padding:4px;text-align:right;font-family:var(--font-mono);color:var(--color-text-success);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.mEq)}</td>
     <td style="padding:4px;text-align:right;font-family:var(--font-mono);color:var(--color-text-info);border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.tkEq)}</td>
