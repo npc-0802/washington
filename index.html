@@ -72,6 +72,23 @@
     color: var(--color-text-primary);
   }
 
+  .wealth-comp .switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 0.75rem;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-background-panel);
+  }
+
+  .wealth-comp .switch-row label {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+  }
+
   @media (max-width: 860px) {
     .wealth-comp .controls-row {
       flex-wrap: wrap;
@@ -93,6 +110,11 @@
       grid-template-columns: 1fr !important;
     }
 
+    .wealth-comp .switch-row {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
     .wealth-comp #table {
       overflow-x: auto;
     }
@@ -104,7 +126,7 @@
 </style>
 
 <div class="wealth-comp">
-<h2 class="sr-only">Net wealth comparison: buy and renovate Moraine St vs buy a turnkey home vs rent, with adjustable inputs.</h2>
+<h2 class="sr-only">Net wealth comparison: buy and renovate Washington vs buy a turnkey home vs rent, with adjustable inputs.</h2>
 
 <div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Current rent</label>
@@ -113,23 +135,50 @@
 </div>
 <div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Extras (furniture etc.)</label>
-  <input type="range" min="0" max="75000" step="1000" value="15000" id="extras" style="flex: 1;" />
-  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="extras-out">$15,000</span>
+  <input type="range" min="0" max="75000" step="1000" value="10000" id="extras" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="extras-out">$10,000</span>
+</div>
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+  <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Washington purchase price</label>
+  <input type="range" min="750000" max="1200000" step="25000" value="925000" id="mPrice" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="mPrice-out">$925,000</span>
+</div>
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+  <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Washington down payment</label>
+  <input type="range" min="25000" max="250000" step="5000" value="110000" id="mDown" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="mDown-out">$110,000</span>
+</div>
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+  <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Up-front mortgage rate</label>
+  <input type="range" min="4" max="9" step="0.125" value="6" id="mInitialRate" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="mInitialRate-out">6.000%</span>
 </div>
 <div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Renovation cost</label>
-  <input type="range" min="50000" max="400000" step="10000" value="200000" id="reno" style="flex: 1;" />
-  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="reno-out">$200,000</span>
+  <input type="range" min="50000" max="400000" step="10000" value="130000" id="reno" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="reno-out">$130,000</span>
 </div>
 <div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">After-renovation value</label>
-  <input type="range" min="1100000" max="1800000" step="25000" value="1400000" id="arv" style="flex: 1;" />
-  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="arv-out">$1,400,000</span>
+  <input type="range" min="1100000" max="1800000" step="25000" value="1200000" id="arv" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="arv-out">$1,200,000</span>
 </div>
 <div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Points purchased</label>
-  <input type="range" min="0" max="4" step="0.5" value="1" id="points" style="flex: 1;" />
-  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="points-out">1.0 pts</span>
+  <input type="range" min="0" max="4" step="0.5" value="0" id="points" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="points-out">0.0 pts</span>
+</div>
+<div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
+  <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Potential refi rate</label>
+  <input type="range" min="3.5" max="8" step="0.125" value="5.25" id="mRefiRate" style="flex: 1;" />
+  <span style="font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; font-family: var(--font-mono);" id="mRefiRate-out">5.250%</span>
+</div>
+<div class="switch-row">
+  <label for="useRefi">Use post-renovation refi</label>
+  <select id="useRefi" style="background: var(--color-background-primary); color: var(--color-text-primary); border: 1px solid var(--color-border-tertiary); border-radius: 999px; padding: 8px 12px; font-family: var(--font-sans);">
+    <option value="yes" selected>Refi after renovation</option>
+    <option value="no">Keep original mortgage</option>
+  </select>
 </div>
 <div class="controls-row" style="display: flex; align-items: center; gap: 12px; margin: 0 0 0.5rem;">
   <label style="font-size: 14px; color: var(--color-text-secondary); min-width: 130px;">Turnkey purchase price</label>
@@ -159,7 +208,7 @@
   <canvas id="wChart" role="img" aria-label="Three-path wealth comparison chart">Wealth comparison</canvas>
 </div>
 <div style="display: flex; flex-wrap: wrap; gap: 14px; margin: 0 0 1.5rem; font-size: 12px; color: var(--color-text-secondary);">
-  <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #1D9E75;"></span>Moraine (buy + reno)</span>
+  <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #1D9E75;"></span>Washington (buy + reno)</span>
   <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #378ADD;"></span>Turnkey (buy, no reno)</span>
   <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #E24B4A;"></span>Rent + invest</span>
 </div>
@@ -167,10 +216,10 @@
 <div style="background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 12px 14px; margin: 0 0 1rem;" id="table"></div>
 
 <div style="font-size: 11px; color: var(--color-text-tertiary); line-height: 1.4;">
-  Moraine: $975k purchase, $250k gift, variable HELOC-funded renovation, an independently adjustable after-renovation value, and optional purchased points financed through the same HELOC before a modeled consolidated refi. Renovation cost changes HELOC size, refi balance, and payment; after-renovation value separately controls the finished appraisal assumption; each purchased point costs $9,500, is financed, and lowers the refi rate by 0.25 percentage points. Turnkey uses the same $250k gift as 25% down plus a 5.875% mortgage. Renter invests the savings versus the cheaper ownership option at 10% annually. All estimates.
+  Washington: variable purchase price, variable down payment, a $250k cash pool allocated first to down payment and then to renovation, an independently adjustable after-renovation value, and optional purchased points financed through HELOC. Renovation cash shortfalls and points are modeled as HELOC debt; the potential refi is modeled but not assumed guaranteed. Each purchased point costs $9,500, is financed, and lowers the potential refi rate by 0.25 percentage points. Turnkey uses a 25% down payment plus the selected purchase price and a 5.875% mortgage. Renter invests the savings versus the cheaper ownership option at 10% annually. All estimates.
 </div>
 <div style="font-size: 11px; color: var(--color-text-tertiary); line-height: 1.4; margin-top: 0.5rem;">
-  Simplification note: Moraine non-mortgage carrying costs are held constant for slider changes, so higher projected finished values do not trigger higher modeled taxes or insurance.
+  Simplification note: Washington non-mortgage carrying costs are held constant for slider changes, so higher projected finished values do not trigger higher modeled taxes or insurance.
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -182,20 +231,19 @@ const fmtK=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n/1000))+'k';
 function pmtCalc(p,r,y){if(p<=0||r<=0)return 0;const m=r/12,n=y*12;return p*(m*Math.pow(1+m,n))/(Math.pow(1+m,n)-1)}
 
 const GIFT=250000;
-const M_PRICE=975000;
-const M_DOWN_PCT=0.25;
-const M_DOWN=M_PRICE*M_DOWN_PCT;
-const M_CLOSE=M_PRICE*0.015;
-const M_CASH=M_DOWN+M_CLOSE-GIFT;
+const CLOSE_RATE=0.015;
+const BASE_PRICE=975000;
+const BASE_DOWN=50000;
 const BASE_RENO=200000;
-const BASE_REFI_LOAN=950000;
 const BASE_REFI_RATE=0.05;
 const POINT_RATE_DROP=0.0025;
 const POINT_COST=9500;
 const BASE_ARV=1400000;
 const M_RENO_MO=6;
-const M_FIXED_COSTS=6150-pmtCalc(BASE_REFI_LOAN,BASE_REFI_RATE,30);
-const M_CARRY_PREMIUM=700;
+const BASE_POINTS=1;
+const BASE_REFI_LOAN=BASE_PRICE-BASE_DOWN+(BASE_POINTS*POINT_COST);
+const M_FIXED_COSTS=6150-pmtCalc(BASE_REFI_LOAN,BASE_REFI_RATE-(BASE_POINTS*POINT_RATE_DROP),30);
+const HELOC_RATE_SPREAD=0.01;
 
 const TK_RATE=0.05875;
 const TK_DOWN_PCT=0.25;
@@ -220,24 +268,42 @@ function remainingBalance(principal, annualRate, years, paymentsMade){
   return Math.max(0,principal*growth-payment*((growth-1)/monthlyRate));
 }
 
-function compute(rent,rg,ap,extras,tkPrice,reno,arv,points){
-  const mCash=M_CASH+extras;
+function compute(rent,rg,ap,extras,tkPrice,mPrice,mDown,mInitialRate,mRefiBaseRate,reno,arv,points,useRefi){
+  const mClose=mPrice*CLOSE_RATE;
+  const mMortgage=Math.max(0,mPrice-mDown);
+  const renoCashAvailable=Math.max(0,GIFT-mDown);
+  const renoCashUsed=Math.min(reno,renoCashAvailable);
+  const renoShortfall=Math.max(0,reno-renoCashAvailable);
   const pointsCost=points*POINT_COST;
-  const mHeloc=reno+pointsCost;
-  const mRefiRate=Math.max(0.01,BASE_REFI_RATE-(points*POINT_RATE_DROP));
-  const mRefiLoan=BASE_REFI_LOAN-BASE_RENO+reno+pointsCost;
+  const mHeloc=renoShortfall+pointsCost;
+  const mHelocRate=Math.max(0.01,mInitialRate+HELOC_RATE_SPREAD);
+  const mRefiRate=Math.max(0.01,mRefiBaseRate-(points*POINT_RATE_DROP));
+  const mRefiLoan=mMortgage+mHeloc;
+  const mRefiPossible=useRefi;
   const mArv=arv;
-  const mSteady=pmtCalc(mRefiLoan,mRefiRate,TERM_YEARS)+M_FIXED_COSTS;
-  const mCarry=mSteady+M_CARRY_PREMIUM;
+  const mInitialMtg=pmtCalc(mMortgage,mInitialRate,TERM_YEARS);
+  const mHelocPayment=mHeloc>0?pmtCalc(mHeloc,mHelocRate,TERM_YEARS):0;
+  const mHelocCarry=mHeloc*mHelocRate/12;
+  const mRefiSteady=pmtCalc(mRefiLoan,mRefiRate,TERM_YEARS)+M_FIXED_COSTS;
+  const mNoRefiSteady=mInitialMtg+mHelocPayment+M_FIXED_COSTS;
+  const mSteady=useRefi?mRefiSteady:mNoRefiSteady;
+  const mCarry=mInitialMtg+mHelocCarry+M_FIXED_COSTS;
+  const mCash=mDown+renoCashUsed+mClose+extras;
+  const mImmediateDebt=useRefi?mRefiLoan:mMortgage+mHeloc;
+  const mImmediateEquity=mArv-mImmediateDebt;
+  const mImmediateEquityPct=mArv>0?mImmediateEquity/mArv:0;
 
   const tkDown=tkPrice*TK_DOWN_PCT;
   const tkClose=tkPrice*0.015;
-  const tkCash=tkDown+tkClose-GIFT+extras;
+  const tkCash=tkDown+tkClose+extras;
   const tkLoan=tkPrice-tkDown;
   const tkMtg=pmtCalc(tkLoan,TK_RATE,30);
   const tkMo=tkMtg+(tkPrice>TK_EXEMPT?(tkPrice-TK_EXEMPT)/1000*12.40/12:0)+TK_INS/12+TK_HOA;
+  const tkImmediateEquity=tkPrice-tkLoan;
+  const tkImmediateEquityPct=tkPrice>0?tkImmediateEquity/tkPrice:0;
 
   const rCash=Math.max(mCash,tkCash,0);
+  const rImmediateEquity=rCash;
 
   const years=[];
   let rPort=rCash;
@@ -251,7 +317,10 @@ function compute(rent,rg,ap,extras,tkPrice,reno,arv,points){
 
     const mHv=mArv*Math.pow(1+ap/100,y);
     const mPmtCount=Math.max(0,y*12-M_RENO_MO);
-    const mBal=remainingBalance(mRefiLoan,mRefiRate,TERM_YEARS,mPmtCount);
+    const mMortgageBal=remainingBalance(mMortgage,mInitialRate,TERM_YEARS,y*12);
+    const mHelocBalNoRefi=remainingBalance(mHeloc,mHelocRate,TERM_YEARS,mPmtCount);
+    const mRefiBal=remainingBalance(mRefiLoan,mRefiRate,TERM_YEARS,mPmtCount);
+    const mBal=useRefi?mRefiBal:mMortgageBal+mHelocBalNoRefi;
     const mEq=mHv-mBal;
 
     const tkHv=tkPrice*Math.pow(1+ap/100,y);
@@ -270,7 +339,7 @@ function compute(rent,rg,ap,extras,tkPrice,reno,arv,points){
     rPaid+=rentYr;
 
     years.push({year:y,
-      mHv:Math.round(mHv),mBal:Math.round(mBal),mEq:Math.round(mEq),mMo:Math.round(mSteady),
+      mHv:Math.round(mHv),mBal:Math.round(mBal),mMortgageBal:Math.round(mMortgageBal),mHelocBal:Math.round(useRefi?0:mHelocBalNoRefi),mRefiBal:Math.round(useRefi?mRefiBal:0),mEq:Math.round(mEq),mMo:Math.round(mSteady),
       tkHv:Math.round(tkHv),tkBal:Math.round(tkBal),tkEq:Math.round(tkEq),tkMo:Math.round(tkMo),
       rPort:Math.round(rPort),rentMo,
       mPaid:Math.round(mPaid),tkPaid:Math.round(tkPaid),rPaid:Math.round(rPaid),
@@ -279,25 +348,35 @@ function compute(rent,rg,ap,extras,tkPrice,reno,arv,points){
   }
 
   let cross=null;for(const y of years){if(y.crossed&&!cross)cross=y.year;}
-  return{years,cross,mCash,tkCash:Math.round(tkCash),rCash:Math.round(rCash),tkMo:Math.round(tkMo),tkLoan:Math.round(tkLoan),mHeloc:Math.round(mHeloc),mRefiLoan:Math.round(mRefiLoan),mRefiRate,mSteady:Math.round(mSteady),mCarry:Math.round(mCarry),mArv:Math.round(mArv),pointsCost:Math.round(pointsCost)};
+  const y7=years[6];
+  const requiredArvForProfit=(mCash+y7.mPaid+y7.mBal)/Math.pow(1+ap/100,7);
+  const requiredArvForTurnkey=(y7.tkEq+y7.mBal)/Math.pow(1+ap/100,7);
+  const requiredArvForRent=(y7.rPort+y7.mBal)/Math.pow(1+ap/100,7);
+  const requiredArvForRefi80=mRefiLoan/0.8;
+  const requiredArvReasonable=Math.max(requiredArvForProfit,requiredArvForTurnkey,requiredArvForRent,useRefi?requiredArvForRefi80:0);
+  return{years,cross,mCash:Math.round(mCash),mClose:Math.round(mClose),mMortgage:Math.round(mMortgage),mDown:Math.round(mDown),renoCashAvailable:Math.round(renoCashAvailable),renoCashUsed:Math.round(renoCashUsed),renoShortfall:Math.round(renoShortfall),tkCash:Math.round(tkCash),rCash:Math.round(rCash),tkMo:Math.round(tkMo),tkLoan:Math.round(tkLoan),mHeloc:Math.round(mHeloc),mHelocRate,mRefiLoan:Math.round(mRefiLoan),mRefiPossible,mInitialRate,mRefiBaseRate,mRefiRate,mInitialMtg:Math.round(mInitialMtg),mHelocCarry:Math.round(mHelocCarry),mHelocPayment:Math.round(mHelocPayment),mRefiSteady:Math.round(mRefiSteady),mNoRefiSteady:Math.round(mNoRefiSteady),mSteady:Math.round(mSteady),mCarry:Math.round(mCarry),mArv:Math.round(mArv),mImmediateEquity:Math.round(mImmediateEquity),mImmediateEquityPct,tkImmediateEquity:Math.round(tkImmediateEquity),tkImmediateEquityPct,rImmediateEquity:Math.round(rImmediateEquity),pointsCost:Math.round(pointsCost),requiredArvForProfit:Math.round(requiredArvForProfit),requiredArvForTurnkey:Math.round(requiredArvForTurnkey),requiredArvForRent:Math.round(requiredArvForRent),requiredArvForRefi80:Math.round(requiredArvForRefi80),requiredArvReasonable:Math.round(requiredArvReasonable)};
 }
 
 let chart;
 function render(){
-  const rent=+$('rent').value,rg=+$('rg').value,ap=+$('ap').value,extras=+$('extras').value,reno=+$('reno').value,arv=+$('arv').value,points=+$('points').value,tkPrice=+$('tkPrice').value;
+  const rent=+$('rent').value,rg=+$('rg').value,ap=+$('ap').value,extras=+$('extras').value,mPrice=+$('mPrice').value,mDown=+$('mDown').value,mInitialRate=+$('mInitialRate').value/100,mRefiBaseRate=+$('mRefiRate').value/100,reno=+$('reno').value,arv=+$('arv').value,points=+$('points').value,useRefi=$('useRefi').value==='yes',tkPrice=+$('tkPrice').value;
   $('rent-out').textContent='$'+rent.toLocaleString();
   $('extras-out').textContent='$'+extras.toLocaleString();
+  $('mPrice-out').textContent='$'+mPrice.toLocaleString();
+  $('mDown-out').textContent='$'+mDown.toLocaleString();
+  $('mInitialRate-out').textContent=(mInitialRate*100).toFixed(3)+'%';
   $('reno-out').textContent='$'+reno.toLocaleString();
   $('arv-out').textContent='$'+arv.toLocaleString();
   $('points-out').textContent=points.toFixed(1)+' pts';
+  $('mRefiRate-out').textContent=(mRefiBaseRate*100).toFixed(3)+'%';
   $('tkPrice-out').textContent='$'+tkPrice.toLocaleString();
   $('rg-out').textContent=rg.toFixed(1)+'%';
   $('ap-out').textContent=ap.toFixed(1)+'%';
 
-  const c=compute(rent,rg,ap,extras,tkPrice,reno,arv,points);
+  const c=compute(rent,rg,ap,extras,tkPrice,mPrice,mDown,mInitialRate,mRefiBaseRate,reno,arv,points,useRefi);
   const y7=c.years[6];
   const outcomes=[
-    {key:'moraine',label:'Moraine + reno',value:y7.mEq,tone:'success'},
+    {key:'washington',label:'Washington + reno',value:y7.mEq,tone:'success'},
     {key:'turnkey',label:'Turnkey',value:y7.tkEq,tone:'info'},
     {key:'rent',label:'Rent + invest',value:y7.rPort,tone:'warning'},
   ].sort((a,b)=>b.value-a.value);
@@ -305,16 +384,20 @@ function render(){
   const runnerUp=outcomes[1];
   const verdictTone=leader.tone==='success'?'var(--color-background-success)':leader.tone==='info'?'var(--color-background-info)':'var(--color-background-warning)';
   const leaderGap=leader.value-runnerUp.value;
-  const renoLift=c.mArv-M_PRICE-reno-M_CLOSE;
-  const crossText=c.cross?`Rent reaches the Moraine steady payment around year ${c.cross}.`:'Rent stays below the Moraine steady payment across the 10-year window.';
+  const renoLift=c.mArv-mPrice-reno-c.mClose;
+  const crossText=c.cross?`Rent reaches the Washington steady payment around year ${c.cross}.`:'Rent stays below the Washington steady payment across the 10-year window.';
+  const arvGap=arv-c.requiredArvReasonable;
+  const arvText=arvGap>=0?`Current ARV clears that threshold by ${fmt(arvGap)}.`:`Current ARV is ${fmt(Math.abs(arvGap))} below that threshold.`;
+  const debtMode=useRefi?`potential consolidated debt is ${fmt(c.mRefiLoan)} at ${(c.mRefiRate*100).toFixed(3)}% after points`:`original mortgage is kept at ${(c.mInitialRate*100).toFixed(3)}%, with any HELOC modeled separately at ${(c.mHelocRate*100).toFixed(3)}%`;
+  const refiHurdle=useRefi?', alternatives, and an 80% LTV refi support check':', turnkey, and rent + invest alternatives';
 
   $('verdict').style.background=verdictTone;
-  $('verdict').innerHTML=`<div style="font-weight:500;font-size:15px;margin-bottom:4px">${leader.label} leads at year 7 by ${fmt(leaderGap)} over ${runnerUp.label}</div><div style="font-size:14px;color:var(--color-text-secondary);line-height:1.5">Renovation cost and purchased points are modeled as HELOC-funded inputs that roll into a consolidated Moraine refi balance of ${fmt(c.mRefiLoan)} at ${(c.mRefiRate*100).toFixed(2)}%. At year 7: Moraine equity ${fmt(y7.mEq)}, turnkey equity ${fmt(y7.tkEq)}, renter portfolio ${fmt(y7.rPort)}. With a ${fmt(reno)} renovation budget, an after-renovation value of ${fmt(arv)}, and ${points.toFixed(1)} points purchased (${fmt(c.pointsCost)} financed), Moraine starts with about ${fmt(renoLift)} of modeled value creation after purchase, renovation, and closing assumptions. ${crossText}</div>`;
+  $('verdict').innerHTML=`<div style="font-weight:500;font-size:15px;margin-bottom:4px">${leader.label} leads at year 7 by ${fmt(leaderGap)} over ${runnerUp.label}</div><div style="font-size:14px;color:var(--color-text-secondary);line-height:1.5">Washington uses a ${fmt(mDown)} down payment from the ${fmt(GIFT)} pool, leaving ${fmt(c.renoCashAvailable)} cash available for renovation. HELOC needed: ${fmt(c.mHeloc)} (${fmt(c.renoShortfall)} renovation shortfall + ${fmt(c.pointsCost)} points). In this view, ${debtMode}. At year 7: Washington equity ${fmt(y7.mEq)}, turnkey equity ${fmt(y7.tkEq)}, renter portfolio ${fmt(y7.rPort)}. Required post-reno value to clear profit${refiHurdle} is about ${fmt(c.requiredArvReasonable)}. ${arvText} ${crossText}</div>`;
 
   $('paths').innerHTML=[
-    {title:'Moraine + reno',mo:c.mSteady,eq7:y7.mEq,hv7:y7.mHv,cash:Math.round(c.mCash),paid:y7.mPaid,startVal:c.mArv,t:'good',sub:`HELOC ${fmt(c.mHeloc)}; refi ${fmt(c.mRefiLoan)} @ ${(c.mRefiRate*100).toFixed(2)}%`},
-    {title:'Turnkey '+fmtK(tkPrice),mo:c.tkMo,eq7:y7.tkEq,hv7:y7.tkHv,cash:c.tkCash,paid:y7.tkPaid,startVal:tkPrice,t:'accent'},
-    {title:'Rent + invest',mo:rent,eq7:y7.rPort,hv7:null,cash:c.rCash,paid:y7.rPaid,startVal:null,t:'warn'},
+    {title:'Washington + reno',mo:c.mSteady,eq7:y7.mEq,hv7:y7.mHv,cash:Math.round(c.mCash),paid:y7.mPaid,startVal:c.mArv,immEq:c.mImmediateEquity,immPct:c.mImmediateEquityPct,t:'good',sub:useRefi?`Refi view: debt ${fmt(c.mRefiLoan)} @ ${(c.mRefiRate*100).toFixed(3)}%`:`No-refi view: mortgage ${fmt(c.mMortgage)} + HELOC ${fmt(c.mHeloc)}`},
+    {title:'Turnkey '+fmtK(tkPrice),mo:c.tkMo,eq7:y7.tkEq,hv7:y7.tkHv,cash:c.tkCash,paid:y7.tkPaid,startVal:tkPrice,immEq:c.tkImmediateEquity,immPct:c.tkImmediateEquityPct,t:'accent'},
+    {title:'Rent + invest',mo:rent,eq7:y7.rPort,hv7:null,cash:c.rCash,paid:y7.rPaid,startVal:null,immEq:c.rImmediateEquity,immPct:null,t:'warn'},
   ].map(p=>{
     const bg=p.t==='good'?'var(--color-background-success)':p.t==='accent'?'var(--color-background-info)':'var(--color-background-warning)';
     const tc=p.t==='good'?'var(--color-text-success)':p.t==='accent'?'var(--color-text-info)':'var(--color-text-warning)';
@@ -329,6 +412,7 @@ function render(){
       <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
         ${fmt(p.mo)}/mo${p.t==='warn'?' (rising)':' (fixed)'}<br>
         ${p.startVal?fmt(p.startVal)+' starting value':'No asset'}<br>
+        ${fmt(p.immEq)} immediate equity${p.immPct===null?' / starting portfolio':' ('+(p.immPct*100).toFixed(1)+'%)'}<br>
         ${fmt(p.cash)} own cash in<br>
         ${fmt(p.paid)} paid by yr 7<br>
         <span style="color:${profitColor}">${fmt(profit)} profit after cash + payments</span>${p.sub?'<br>'+p.sub:''}
@@ -336,15 +420,15 @@ function render(){
     </div>`;
   }).join('');
 
-  const dk=matchMedia('(prefers-color-scheme:dark)').matches;
+  const dk=true;
   if(chart)chart.destroy();
   const chartTitle=chartMode==='wealth'?'Estimated wealth by year':'Cumulative housing payments by year';
   const datasetConfig=chartMode==='wealth' ? [
-    {label:'Moraine + reno',data:c.years.map(y=>y.mEq),borderColor:'#1D9E75',backgroundColor:dk?'rgba(29,158,117,0.08)':'rgba(29,158,117,0.05)',fill:true,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2.5},
+    {label:'Washington + reno',data:c.years.map(y=>y.mEq),borderColor:'#1D9E75',backgroundColor:dk?'rgba(29,158,117,0.08)':'rgba(29,158,117,0.05)',fill:true,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2.5},
     {label:'Turnkey',data:c.years.map(y=>y.tkEq),borderColor:'#378ADD',backgroundColor:dk?'rgba(55,138,221,0.08)':'rgba(55,138,221,0.04)',fill:true,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2},
     {label:'Rent+invest',data:c.years.map(y=>y.rPort),borderColor:'#E24B4A',backgroundColor:dk?'rgba(226,75,74,0.06)':'rgba(226,75,74,0.03)',fill:true,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:1.5},
   ] : [
-    {label:'Moraine + reno',data:c.years.map(y=>y.mPaid),borderColor:'#1D9E75',backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2.5,borderDash:[0]},
+    {label:'Washington + reno',data:c.years.map(y=>y.mPaid),borderColor:'#1D9E75',backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2.5,borderDash:[0]},
     {label:'Turnkey',data:c.years.map(y=>y.tkPaid),borderColor:'#378ADD',backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:2,borderDash:[0]},
     {label:'Rent+invest',data:c.years.map(y=>y.rPaid),borderColor:'#E24B4A',backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:3,pointHoverRadius:6,borderWidth:1.5,borderDash:[0]},
   ];
@@ -357,7 +441,7 @@ function render(){
   $('mode-payments').classList.toggle('is-active',chartMode==='payments');
   $('mode-payments').setAttribute('aria-pressed',String(chartMode==='payments'));
 
-  $('table').innerHTML=`<div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Year-by-year wealth</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Home equity includes estimated remaining loan balance after scheduled payments. Renting assumes the savings versus the cheaper ownership option are invested at 10% annually. Moraine renovation cost is ${fmt(reno)}, after-renovation value is ${fmt(arv)}, and ${points.toFixed(1)} purchased points cost ${fmt(c.pointsCost)} and are financed through the HELOC, which also lowers the refi rate by ${(points*0.25).toFixed(2)} percentage points.</div><table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed"><thead><tr>${['Yr','Moraine equity','Turnkey equity','Renter $','Reno vs turnkey','Reno vs rent'].map((h,i)=>`<th style="text-align:${i===0?'left':'right'};padding:5px 4px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${h}</th>`).join('')}</tr></thead><tbody>${c.years.map(y=>`<tr>
+  $('table').innerHTML=`<div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Year-by-year wealth</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Home equity includes estimated remaining loan balance after scheduled payments. Current Washington mode: ${useRefi?'post-renovation refi':'keep original mortgage'}. Washington cash allocation: ${fmt(c.mDown)} down, ${fmt(c.renoCashUsed)} renovation cash, ${fmt(c.renoShortfall)} renovation HELOC shortfall, ${fmt(c.pointsCost)} financed points. Required post-reno value: ${fmt(c.requiredArvForProfit)} for profit after cash + payments, ${fmt(c.requiredArvForTurnkey)} to match turnkey, ${fmt(c.requiredArvForRent)} to match rent + invest${useRefi?`, and ${fmt(c.requiredArvForRefi80)} to support the modeled debt at 80% LTV`:''}.</div><table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed"><thead><tr>${['Yr','Washington equity','Turnkey equity','Renter $','Reno vs turnkey','Reno vs rent'].map((h,i)=>`<th style="text-align:${i===0?'left':'right'};padding:5px 4px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${h}</th>`).join('')}</tr></thead><tbody>${c.years.map(y=>`<tr>
     <td style="padding:4px;border-bottom:0.5px solid var(--color-border-tertiary)">${y.year}</td>
     <td style="padding:4px;text-align:right;font-family:var(--font-mono);color:var(--color-text-success);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.mEq)}</td>
     <td style="padding:4px;text-align:right;font-family:var(--font-mono);color:var(--color-text-info);border-bottom:0.5px solid var(--color-border-tertiary)">${fmtK(y.tkEq)}</td>
@@ -367,7 +451,7 @@ function render(){
   </tr>`).join('')}</tbody></table>`;
 }
 
-['rent','rg','ap','extras','reno','arv','points','tkPrice'].forEach(id=>$(id).addEventListener('input',render));
+['rent','rg','ap','extras','mPrice','mDown','mInitialRate','reno','arv','points','mRefiRate','useRefi','tkPrice'].forEach(id=>$(id).addEventListener('input',render));
 $('mode-wealth').addEventListener('click',()=>{chartMode='wealth';render();});
 $('mode-payments').addEventListener('click',()=>{chartMode='payments';render();});
 render();
